@@ -1,0 +1,190 @@
+// Google Fonts
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+// font-family: 'Inter', sans-serif;
+
+body {
+  background: rgb(4, 13, 62);
+  font-family: "Inter", sans-serif;
+}
+
+// Переменные для блока
+$minWidth: 320px;
+$maxWidth: 1152px;
+$maxWidthCon: 1144px;
+$md1: $maxWidthCon + 12;
+$md2: 991.98px;
+$md3: 767.98px;
+$md4: 479.98px;
+
+// Переменные для Цвета
+$yellow: #fffc00;
+
+$salat: #99efd0;
+$black-light: #1c1b18;
+$black: #000000;
+$white: #ffffff;
+$grey: #e5e5e5;
+
+// Основная сетка
+._container {
+  max-width: $maxWidthCon;
+  margin: 0 auto;
+  padding: 0px 20px;
+
+  @media (max-width: $md1) {
+    max-width: 970px;
+  }
+  @media (max-width: $md2) {
+    max-width: 750px;
+  }
+  @media (max-width: $md3) {
+    max-width: none;
+    padding: 0 10px;
+  }
+}
+
+.section__main {
+  margin-top: 100px;
+  &__content {
+    padding: 30px;
+    border: 1px solid $black-light;
+    border-radius: 10px;
+  }
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &__item {
+      width: 300px;
+      border: 1px solid $black-light;
+      border-radius: 10px;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  &__product {
+    margin: 30px 0;
+    &__item {
+      display: flex;
+      justify-content: space-between;
+      border: 1px solid $black-light;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+      &__block {
+        display: flex;
+        justify-content: space-between;
+
+        &__img {
+        }
+        &__text {
+        }
+        &__quantity {
+        }
+        &__name {
+        }
+      }
+      &__price {
+      }
+    }
+  }
+  &__form {
+    &__title {
+      font-size: 23px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    &__body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      &__item {
+      }
+    }
+  }
+  &__info {
+    margin-top: 20px;
+    &__paragraph {
+      font-size: 13px;
+      font-weight: 300;
+      span {
+        color: #1e1bd9;
+        cursor: pointer;
+      }
+    }
+  }
+  &__action {
+    margin-top: 20px;
+    text-align: center;
+    &__btn.v-btn {
+      background: $yellow;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+  }
+
+  &__credit {
+    margin-top: 20px;
+    border: 1px solid $black-light;
+    border-radius: 10px;
+    padding: 20px;
+    &__title {
+      font-size: 23px;
+      font-weight: 600;
+      text-align: center;
+      margin: 20px 0;
+    }
+    &__filter {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    &__table {
+      &__item {
+        &__header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          &__title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+          }
+          margin-bottom: 10px;
+        }
+        &__row {
+          padding: 5px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-top: 1px solid $black-light;
+          &__type {
+          }
+          &__price {
+          }
+          &__prefix {
+          }
+          &__period {
+          }
+        }
+      }
+    }
+  }
+}
+
+.credit-btn-toggle .v-btn {
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.credit-btn-toggle .v-btn--active {
+  background-color: #1976d2; /* Blue background for active button */
+  color: white; /* White text for active button */
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); /* Optional: add shadow for a raised effect */
+  text-transform: none;
+  letter-spacing: normal;
+}
