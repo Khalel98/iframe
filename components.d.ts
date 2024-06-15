@@ -7,11 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    AppFooter: typeof import('./src/components/AppFooter.vue')['default']
-    copy: typeof import('./src/components/secondStep.vue')['default']
     FirstStep: typeof import('./src/components/firstStep.vue')['default']
-    HelloWorld: typeof import('./src/./src/components/secondStep.vuet']
-    Main: typeof import('./src/components/mainComponent.vue')['default']
     MainComponent: typeof import('./src/components/mainComponent.vue')['default']
     SecondStep: typeof import('./src/components/secondStep.vue')['default']
   }
