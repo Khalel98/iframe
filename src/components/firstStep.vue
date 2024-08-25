@@ -1,28 +1,31 @@
 <template>
   <div class="section__main__product">
     <div
-      v-for="item in items"
-      :key="item.id"
+      v-for="item in items?.credit_goods"
+      :key="item.product_id"
       class="section__main__product__item"
     >
       <div class="section__main__product__item__block">
-        <img
+        <!-- <img
           :src="item.img"
           alt=""
           class="section__main__product__item__block__img"
-        />
+        /> -->
         <div class="section__main__product__item__block__text">
           <div class="section__main__product__item__block__quantity">
             Количество: {{ item.quantity }}
           </div>
           <div class="section__main__product__item__block__name">
-            Наименование товара: {{ item.name }}
+            Наименование товара: {{ item.model }}
+          </div>
+          <div class="section__main__product__item__block__name">
+            Категория: {{ item.category }}
           </div>
         </div>
       </div>
 
       <div class="section__main__product__item__price">
-        Цена: {{ item.price }}
+        Цена: {{ item.cost }}
       </div>
     </div>
   </div>
@@ -50,12 +53,11 @@
           <v-text-field
             variant="outlined"
             v-model="phone"
-            :counter="11"
             :rules="[
               (v) => !!v || 'Номер телефона',
-              (v) =>
-                /^[0-9]{11}$/.test(v) ||
-                'Номер телефона должен содержать 11 цифр',
+              // (v) =>
+              //   /^[0-9]{12}$/.test(v) ||
+              //   'Номер телефона должен содержать 11 цифр',
             ]"
             label="Номер телефона"
             required
@@ -82,9 +84,33 @@
       Подтвердить смс кодом
     </v-btn>
   </div>
+
+  <v-dialog v-model="otpDialog" width="auto">
+    <v-card>
+      <div class="section__auth__modal" style="padding: 20px">
+        <v-otp-input
+          v-model="code"
+          :loading="loading"
+          length="4"
+          variant="underlined"
+        ></v-otp-input>
+        <v-btn
+          :disabled="code.length < 4"
+          class="mt-4"
+          color="grey-darken-4"
+          block
+          @click="scoring"
+        >
+          Подтвердить
+        </v-btn>
+      </div>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import axios from "@/axios";
 export default {
   props: {
     items: {
@@ -94,17 +120,81 @@ export default {
   },
   data() {
     return {
-      iin: "",
-      phone: "",
+      iin: "911019401457",
+      phone: "+77779138822",
+      code: "",
+      otpDialog: false,
+      loading: false,
     };
   },
-
   methods: {
+    acceptSms() {
+      this.smsValidate();
+      this.otpDialog = true;
+    },
+    async smsValidate() {
+      this.loading = true;
+      try {
+        const response = await axios.post("iframe_send_sms", {
+          iin: this.iin,
+          mobile_phone: this.phone,
+          accepted: 1,
+        });
+        console.log("Res", response.data);
+        if (response.data.success) {
+          alert(response.data.data.data);
+        } else {
+          alert("Что-то пошло не так");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Что-то пошло не так");
+      } finally {
+        this.loading = false;
+        this.dialog = false;
+      }
+    },
+    async scoring() {
+      try {
+        const response = await axios.post("iframe_scoring", {
+          iin: this.iin,
+          mobile_phone: this.phone, // Тел. заемщика
+          principal: this.items?.principal, // общая стоимость
+          code: this.code, // код смс
+          credit_goods: this.items?.credit_goods,
+        });
+        console.log("Res", response.data);
+        this.$emit("scoring", response.data.scoring_id);
+      } catch (error) {
+        console.error(error);
+        alert("Что-то пошло не так");
+      }
+    },
+
     async validate() {
       const { valid } = await this.$refs.form.validate();
       if (valid) {
-        this.$emit("change");
+        this.acceptSms();
       }
+    },
+
+    handleMessage(event) {
+      if (event.origin !== "https://your-parent-origin.com") {
+        return; // Проверяем origin, чтобы убедиться, что сообщение пришло от ожидаемого источника
+      }
+      console.log("Получено сообщение:", event.data); // Здесь вы обрабатываете данные
+      if (event.data.token) {
+        // Делаем что-то с токеном, например сохраняем его в состояние компонента
+        this.token = event.data.token;
+      }
+    },
+
+    created() {
+      window.addEventListener("message", this.handleMessage);
+    },
+
+    beforeUnmount() {
+      window.removeEventListener("message", this.handleMessage);
     },
   },
 };

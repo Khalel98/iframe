@@ -1,7 +1,7 @@
 import axios from "axios";
 import store from "./store";
 
-const apiKey = "https://api.portal.demo.edus.kz/v1/ru/";
+const apiKey = "https://staging-api.business.incredit.kz/api/";
 
 const instance = axios.create({
   baseURL: apiKey,
@@ -17,11 +17,6 @@ instance.interceptors.request.use(
 
     if (activeToken) {
       config.headers.Authorization = `Bearer ${activeToken}`;
-
-      config.headers["X-Connection-Id"] =
-        store.getters.getOtherAccounts[0].connection.id; // Replace with your connection ID
-
-      config.headers["X-Role-Id"] = store.getters.getOtherAccounts[0].role.id; // Replace with your role ID
     }
 
     return config;
@@ -33,13 +28,10 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (response) => {
-    // Do something with the response data
     return response;
   },
   (error) => {
     if (error.response && error.response.status === 401) {
-      // Logout user or perform any other action related to token expiration
-      store.dispatch("logout"); // Assuming you have a logout action in your store
       setTimeout(reloadPage, 1000);
     }
     return Promise.reject(error);

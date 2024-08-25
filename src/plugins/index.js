@@ -5,8 +5,9 @@
  */
 
 // Plugins
-import vuetify from './vuetify'
+import vuetify from "./vuetify";
+import store from "@/store"; // Import your Vuex store
 
-export function registerPlugins (app) {
-  app.use(vuetify)
+export function registerPlugins(app) {
+  app.use(vuetify).use(store);
 }
