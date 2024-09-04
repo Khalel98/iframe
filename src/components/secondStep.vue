@@ -4,7 +4,14 @@
       2/3 Выбор предложения и оформление
     </div>
     <div
-      v-if="!approved?.length"
+      class="section__main__credit__title"
+      v-if="message"
+      style="font-size: 14px"
+    >
+      {{ message }}
+    </div>
+    <div
+      v-if="status === 'PROCESSING'"
       style="display: flex; justify-content: center"
     >
       <v-progress-circular
@@ -14,7 +21,7 @@
       ></v-progress-circular>
     </div>
 
-    <div v-else>
+    <div v-if="approved?.length">
       <div class="section__main__credit__filter">
         <v-btn-toggle v-model="loan" class="credit-btn-toggle">
           <v-btn value="all">Все</v-btn>
@@ -63,12 +70,12 @@
           </div>
         </div>
       </v-radio-group>
-    </div>
 
-    <div class="section__main__action">
-      <v-btn class="section__main__action__btn" @click="requestConfirm">
-        Оформить кредит
-      </v-btn>
+      <div class="section__main__action">
+        <v-btn class="section__main__action__btn" @click="requestConfirm">
+          Оформить кредит
+        </v-btn>
+      </div>
     </div>
   </div>
 </template>
@@ -170,7 +177,11 @@ export default {
         console.log("Res", response.data.data);
         this.status = response.data.data.status;
         this.approved = response.data.data.approved;
-        if (response.data.data.message) {
+        if (
+          response.data.data.status === "REJECTED" ||
+          response.data.data.status === "REFUND" ||
+          response.data.data.status === "FAILED"
+        ) {
           this.message = response.data.data.message;
         }
       } catch (error) {

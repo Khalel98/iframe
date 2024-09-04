@@ -120,8 +120,8 @@ export default {
   },
   data() {
     return {
-      iin: "911019401457",
-      phone: "+77779138822",
+      iin: "981130350514",
+      phone: "+77752823378",
       code: "",
       otpDialog: false,
       loading: false,
